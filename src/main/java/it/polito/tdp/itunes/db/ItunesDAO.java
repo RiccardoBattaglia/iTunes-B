@@ -140,5 +140,29 @@ public class ItunesDAO {
 	}
 	
 	
+	public double getDurataDaAlbum(int albumid){
+		final String sql = "select sum(t.milliseconds)/1000 as durata "
+				+ "from track t, album a "
+				+ "where a.albumid=t.albumid and a.albumid=? ";
+		double result = 0.0;
+		
+		try {
+			Connection conn = DBConnect.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setInt(1, albumid);
+			ResultSet res = st.executeQuery();
+
+			while (res.next()) {
+				result=res.getInt("durata");
+			}
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException("SQL Error");
+		}
+		return result;
+	}
+	
+	
 	
 }
